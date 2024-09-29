@@ -1,5 +1,7 @@
 #!/bin/bash
 
+proj_name="GTestSetup"
+
 container_tool=""
 
 echo "Check either docker/podman is available!"
@@ -23,19 +25,26 @@ usage() {
     exit 1
 }
 
-while getopts "pc" Option
+while getopts "p" Option
 do
     case $Option in
     p) port_map="$port_map - p $OPTARG";;
-    c) service="$OPTARG";;
     *) usage ;;
     esac
 done
 
+service="gtest_test_env"
 echo "Spawning container ${service}"
 gitRootPath=$(git rev-parse --show-toplevel)
-echo "${gitRootPath}"
-compose_file=$gitRootPath/setup/compose.yaml
+
+if [[ $(basename -s .git $(git remote get-url origin)) == $proj_name ]] then
+    echo "Setup environment in the $proj_name"
+else
+    echo "Setup environment in the $gitRootPath"
+fi
+
+# compose_file=$gitRootPath/GTestSetup/compose.yaml
+compose_file=compose.yaml
 
 
 shift $((OPTIND-1))
