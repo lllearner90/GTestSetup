@@ -1,0 +1,78 @@
+#!/bin/bash
+
+container_tool=""
+
+echo "Check either docker/podman is available!"
+if command -v docker &> /dev/null; then
+    container_tool="docker"
+elif command -v podman &> /dev/null; then
+    container_tool="podman"
+else
+    echo "Docker/Podman not available! Install one and rerun the script."
+    exit 1
+fi
+
+echo "${container_tool} available!"
+
+# Function to display usage
+usage() {
+    echo "Usage: $0 -p <port_range> -c <name>"
+    echo "Options:"
+    echo "  -p <port_map>: Port mapping in the form 'start_port:end_port'"
+    echo "  -c <name>: Container services (check services in compose.yaml)"
+    exit 1
+}
+
+while getopts "pc" Option
+do
+    case $Option in
+    p) port_map="$port_map - p $OPTARG";;
+    c) service="$OPTARG";;
+    *) usage ;;
+    esac
+done
+
+echo "Spawning container ${service}"
+gitRootPath=$(git rev-parse --show-toplevel)
+echo "${gitRootPath}"
+compose_file=$gitRootPath/setup/compose.yaml
+
+
+shift $((OPTIND-1))
+
+container_cmd=$*
+
+case "$(uname -s)" in
+    MSYS*|MINGW*)
+        WIN_TTY=winpty
+        ;;
+    CYGWIN*|LINUX|Linux)
+        WIN_TTY=''
+        ;;
+    *)
+        echo "unsupported bash interpreter $(uname -s)"
+        exit 1
+        ;;
+esac
+
+# create an empty cinfig, if it doesnot exist
+[ ! -f ~/.ssh/config ] && {
+    echo "Warning: ~/.ssh/config doesnot exist"
+    touch ~/.ssh/config
+}
+
+[ ! -f ~/.gitconfig ] && {
+    echo "Error: ~/.gitconfig doesnot exist"
+}
+
+[ ! -f ~/.container_bash_history ] && {
+    echo "Warning: ~/.container_bash_history doesnot exist, file created automatically"
+    touch ~/.container_bash_history
+}
+
+[ ! -f ~/.container_bashrc ] && {
+    echo "Warning: ~/.container_bashrc doesnot exist, file created automatically"
+    touch ~/.container_bashrc
+}
+
+$WIN_TTY $container_tool compose -f $compose_file run --rm $service $container_cmd
