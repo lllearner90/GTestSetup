@@ -40,3 +40,6 @@ This would spun out a container with following prompt
 ```bash
 root@gtest_env:/mnt/ws#
 ```
+### Highlights
+The container mounts the local directory; a level up from where the **_setup_env_** is being called into the container workspace `/mnt/ws`.
+This directory should be a git repository for the **_setup_env_** script to work.
