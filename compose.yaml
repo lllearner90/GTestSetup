@@ -9,6 +9,8 @@ services:
       args:
         BUILD_DIR: /mnt/ws
         TIMEZONE: Europe/Berlin
+        # Rebuild the container when GTest version is changed else the value has no effect
+        GTEST_VERSION: v1.14.0
     stdin_open: true
     tty: true
     hostname: gtest_env
@@ -16,7 +18,7 @@ services:
     cap_add:
       - all
 
-    entrypoint: /bin/bash
+    entrypoint: /bin/bash 
     volumes:
       - type: bind
         source: ../

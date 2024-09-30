@@ -21,7 +21,6 @@ usage() {
     echo "Usage: $0 -p <port_range> -c <name>"
     echo "Options:"
     echo "  -p <port_map>: Port mapping in the form 'start_port:end_port'"
-    echo "  -c <name>: Container services (check services in compose.yaml)"
     exit 1
 }
 

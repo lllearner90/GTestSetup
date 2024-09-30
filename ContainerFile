@@ -21,7 +21,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists
 
 
-ARG GTEST_VERSION=v1.14.0
+ARG GTEST_VERSION
 # Needed to vallidate certificates with github
 RUN git config --global http.sslVerify false
 
