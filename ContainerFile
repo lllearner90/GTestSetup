@@ -14,7 +14,7 @@ RUN apt-get update && \
     git \
     # gmock gmock-devel gtest gtest-devel \
     cmake extra-cmake-modules ninja-build build-essential\
-    g++ gcc \
+    g++ gcc gdb\
     valgrind && \
     # libasan liblsan lcov && \
     apt-get clean && \

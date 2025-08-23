@@ -36,7 +36,9 @@ service="gtest_test_env"
 echo "Spawning container ${service}"
 gitRootPath=$(git rev-parse --show-toplevel)
 
-if [[ $(basename -s .git $(git remote get-url origin)) == $proj_name ]] then
+repoName=$(basename -s .git $(git remote get-url origin))
+
+if [[ "$repo_name" == "$proj_name" ]]; then
     echo "Setup environment in the $proj_name"
 else
     echo "Setup environment in the $gitRootPath"
@@ -63,15 +65,15 @@ case "$(uname -s)" in
         ;;
 esac
 
-# create an empty cinfig, if it doesnot exist
-[ ! -f ~/.ssh/config ] && {
-    echo "Warning: ~/.ssh/config doesnot exist"
-    touch ~/.ssh/config
-}
+# create an empty config, if it doesnot exist
+# [ ! -f ~/.ssh/config ] && {
+#     echo "Warning: ~/.ssh/config doesnot exist"
+#     touch ~/.ssh/config
+# }
 
-[ ! -f ~/.gitconfig ] && {
-    echo "Error: ~/.gitconfig doesnot exist"
-}
+# [ ! -f ~/.gitconfig ] && {
+#     echo "Error: ~/.gitconfig doesnot exist"
+# }
 
 [ ! -f ~/.container_bash_history ] && {
     echo "Warning: ~/.container_bash_history doesnot exist, file created automatically"
